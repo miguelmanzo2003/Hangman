@@ -1,0 +1,107 @@
+import java.util.Scanner;
+
+public class Hangman {
+
+
+
+    public static void main(String[] args) {
+
+
+        String lettersRemaining = "abcdefghijklmnopqrstuvwxyz";
+
+        //possible words that can be the solution to the hangman
+        String[] words = new String[] { "computer", "science" };
+
+        String randomWord = words[(int) (Math.random() * words.length)];
+
+        //this will tell you how many letters the word (chosen randomly by the program) has
+        System.out.println("The word has " + randomWord.length() + " letters.");
+
+        //an array of characters that is as long as the length of the word chosen
+        char[] letters = new char[randomWord.length()];
+
+        //the array of characters will all be '-' for now
+        for (int i = 0; i < letters.length; i++) {
+            letters[i] = '-';
+        }
+
+        //helps us keep track of how many tries the user has left before they lose the game
+        int lives = 3;
+
+        Scanner scanner = new Scanner(System.in);
+
+        //as long as they still have chances to guess this section of code will keep running
+        while (lives > 0) {
+            System.out.print("Lives: ");
+
+            for (int i = 0; i < lives; i++) {
+
+                    System.out.print("x");
+
+            }
+
+            System.out.println();
+
+            //where we will ask the user to pick a letter
+            System.out.println("Input: ");
+
+            //and here is where we scan for it
+            String input = scanner.nextLine();
+
+            // this will put the letter entered by the user in the first position of the ---- array
+            char letter = input.charAt(0);
+
+            //make boolean to differentiate what happens when the user gets a letter right vs when the user gets
+            // the letter wrong
+            boolean CorrectLetter = false;
+
+            //this is going to go through the random word that the program picked and see if
+            // the letter input by the user matches with the position of the same letter in the random word
+            for (int i = 0; i < randomWord.length(); i++) {
+                char l = randomWord.charAt(i);
+
+                //if there is a letter match, it will replace the '-' with the letter that matched
+                if (l == letter) {
+                    letters[i] = l;
+                    CorrectLetter = true;
+                }
+            }
+            //if the user input a letter that was not in the word, they lose a life
+            if (!CorrectLetter) {
+                lives = lives - 1;
+            }
+
+            boolean isOver = true;
+
+            System.out.print("Word: ");
+
+            //this will keep the game going until all the '-' in the array are gone/replaced by letters
+            for (int i = 0; i < letters.length; i++) {
+                if (letters[i] == '-') {
+                    isOver = false;
+                }
+                //here it prints the letters that we do have
+                System.out.print(letters[i]);
+            }
+
+            System.out.println();
+
+            //the letters that have been guessed will be replaced by the '-'
+            lettersRemaining = lettersRemaining.replace(letter, '-');
+
+            System.out.println("Letters remaining: " + lettersRemaining);
+
+
+            //if it gets to this point you won
+            if (isOver) {
+                System.out.println("You won!");
+                break;
+            }
+        }
+        //once the count gets to 0 it tells you the word
+        if (lives == 0) {
+            System.out.println("Incorrect, the word was: " + randomWord);
+        }
+
+    }
+}
